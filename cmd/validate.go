@@ -53,15 +53,15 @@ func init() {
 	rootCmd.AddCommand(validateCmd)
 
 	// individual cr files
-	validateCmd.Flags().StringSliceVar(&crFiles, "cr-files", []string{}, "List of files to validate. Repeat the flag for multiple files")
+	validateCmd.Flags().StringSliceVar(&crFiles, "cr-files", []string{}, "List of files to validate. Repeat the flag for multiple files. Comma separated list is also supported.")
 	// cr folders
-	validateCmd.Flags().StringSliceVar(&crFolders, "cr-folders", []string{}, "List of folders containing files to validate. Repeat the flag for multiple folders")
+	validateCmd.Flags().StringSliceVar(&crFolders, "cr-folders", []string{}, "List of folders containing files to validate. Repeat the flag for multiple folders. Comma separated list is also supported.")
 
 	// individual crd files
-	validateCmd.Flags().StringSliceVar(&crdFiles, "crd-files", []string{}, "List of files containing CRD(s). Repeat the flag for multiple files")
+	validateCmd.Flags().StringSliceVar(&crdFiles, "crd-files", []string{}, "List of files containing CRD(s). Repeat the flag for multiple files. Comma separated list is also supported.")
 	// crd folders
-	validateCmd.Flags().StringSliceVar(&crdFolders, "crd-folders", []string{}, "List of folders containing CRD(s). Repeat the flag for multiple folders")
+	validateCmd.Flags().StringSliceVar(&crdFolders, "crd-folders", []string{}, "List of folders containing CRD(s). Repeat the flag for multiple folders. Comma separated list is also supported.")
 
-	validateCmd.Flags().StringSliceVar(&ignoreKind, "ignore-kinds", []string{}, "List of Kinds to ignore. Repeat the flag for multiple kinds")
+	validateCmd.Flags().StringSliceVar(&ignoreKind, "ignore-kinds", []string{}, "List of Kinds to ignore. Repeat the flag for multiple kinds. Comma separated list is also supported.")
 
 }
