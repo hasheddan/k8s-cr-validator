@@ -10,7 +10,7 @@ import (
 // Validate returns an error
 // if the cr(s) cannot be validated againt the given crd(s)
 // or else if crd is not given and does not conform to jsonSchema(s) for known kubernetes native objects
-func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolders []string) error {
+func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolders []string, ignoreKind []string) error {
 	var merr *multierror.Error
 
 	// collect paths of all CRDs
@@ -24,7 +24,7 @@ func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolder
 	// collect paths of all CRs
 	crPaths := aggregateFiles(crFiles, crFolders)
 	// fmt.Printf("List of files to Validate %v\n", crPaths)
-	crList, err := readCR(crPaths)
+	crList, err := readCR(crPaths, ignoreKind)
 	if err != nil {
 		merr = multierror.Append(merr, fmt.Errorf("failed to read CR: %w", err))
 	}

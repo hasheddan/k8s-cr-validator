@@ -130,7 +130,7 @@ func generateValidators(crds []string) (map[schema.GroupVersionKind]*validate.Sc
 }
 
 // readCR returns unmarshalled unstructured.Unstructured for the given CR files
-func readCR(crs []string) ([]*unstructured.Unstructured, error) {
+func readCR(crs []string, ignoreKind []string) ([]*unstructured.Unstructured, error) {
 	var crList []*unstructured.Unstructured
 
 	for _, crPath := range crs {
@@ -163,8 +163,20 @@ func readCR(crs []string) ([]*unstructured.Unstructured, error) {
 				f.Close()
 				return nil, fmt.Errorf("error decoding yaml %s: %w", b, err)
 			}
-			crList = append(crList, obj)
-			color.Green("Loaded %s of type %s", obj.GetName(), obj.GroupVersionKind())
+			// check if the kind is in the ignoreKind list, if so, skip it
+			toLoad := true
+			for _, kind := range ignoreKind {
+				if obj.GetKind() == kind {
+					toLoad = false
+					color.Yellow("Ignored %s of type %s", obj.GetName(), obj.GroupVersionKind())
+					break
+				}
+			}
+			if toLoad {
+				crList = append(crList, obj)
+				color.Green("Loaded %s of type %s", obj.GetName(), obj.GroupVersionKind())
+			}
+
 		}
 		err = f.Close()
 		if err != nil {

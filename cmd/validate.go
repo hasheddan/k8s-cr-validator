@@ -16,6 +16,7 @@ var (
 	crFolders  []string
 	crdFiles   []string
 	crdFolders []string
+	ignoreKind []string
 )
 
 // validateCmd represents the validate command
@@ -25,7 +26,7 @@ var validateCmd = &cobra.Command{
 	Long:  "Validate CR againt CRD",
 	// Args: cobra.OnlyValidArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := validate.Validate(crFiles, crFolders, crdFiles, crdFolders); err != nil {
+		if err := validate.Validate(crFiles, crFolders, crdFiles, crdFolders, ignoreKind); err != nil {
 			// red color for errors
 			color.Set(color.FgHiRed, color.Bold)
 			defer color.Unset()
@@ -60,5 +61,7 @@ func init() {
 	validateCmd.Flags().StringSliceVar(&crdFiles, "crd-files", []string{}, "List of files containing CRD(s). Repeat the flag for multiple files")
 	// crd folders
 	validateCmd.Flags().StringSliceVar(&crdFolders, "crd-folders", []string{}, "List of folders containing CRD(s). Repeat the flag for multiple folders")
+
+	validateCmd.Flags().StringSliceVar(&ignoreKind, "ignore-kinds", []string{}, "List of Kinds to ignore. Repeat the flag for multiple kinds")
 
 }
