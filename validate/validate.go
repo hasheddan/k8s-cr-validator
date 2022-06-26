@@ -187,12 +187,12 @@ func readCR(crs []string, ignoreKind []string) ([]*unstructured.Unstructured, er
 }
 
 // kubeConform returns error if the given CR cannot be validated against by kubeConform
-func kubeConform(cr *unstructured.Unstructured) error {
+func kubeConform(cr *unstructured.Unstructured, k8sVersion string) error {
 
 	// Create a validator
 	conformValidator, err := validator.New(nil, validator.Opts{
 		Strict:            true,
-		KubernetesVersion: "1.20.12"})
+		KubernetesVersion: k8sVersion})
 	if err != nil {
 		return fmt.Errorf("failed initializing validator: %w", err)
 	}
