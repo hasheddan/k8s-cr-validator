@@ -1,0 +1,127 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+project_name: k8s-cr-validator
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - "7"
+      - "6"
+    ldflags:
+      - -s -w
+
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+
+
+dockers:
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: "Dockerfile.goreleaser"
+    image_templates:
+      - "moulick/{{ .ProjectName }}:{{ .Tag }}-amd64"
+      - "moulick/{{ .ProjectName }}:{{ .Major }}-amd64"
+      - "moulick/{{ .ProjectName }}:latest-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: "Dockerfile.goreleaser"
+    image_templates:
+      - "moulick/{{ .ProjectName }}:{{ .Tag }}-arm64v8"
+      - "moulick/{{ .ProjectName }}:{{ .Major }}-arm64v8"
+      - "moulick/{{ .ProjectName }}:latest-arm64v8"
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+  - use: buildx
+    goos: linux
+    goarch: arm
+    goarm: "6"
+    dockerfile: "Dockerfile.goreleaser"
+    image_templates:
+      - "moulick/{{ .ProjectName }}:{{ .Tag }}-armv6"
+      - "moulick/{{ .ProjectName }}:{{ .Major }}-armv6"
+      - "moulick/{{ .ProjectName }}:latest-armv6"
+    build_flag_templates:
+      - "--platform=linux/arm/v6"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+  - use: buildx
+    goos: linux
+    goarch: arm
+    goarm: "7"
+    dockerfile: "Dockerfile.goreleaser"
+    image_templates:
+      - "moulick/{{ .ProjectName }}:{{ .Tag }}-armv7"
+      - "moulick/{{ .ProjectName }}:{{ .Major }}-armv7"
+      - "moulick/{{ .ProjectName }}:latest-armv7"
+    build_flag_templates:
+      - "--platform=linux/arm/v7"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+docker_manifests:
+  # https://goreleaser.com/customization/docker_manifest/
+  - name_template: moulick/{{ .ProjectName }}:{{ .Tag }}
+    image_templates:
+      - moulick/{{ .ProjectName }}:{{ .Tag}}-amd64
+      - moulick/{{ .ProjectName }}:{{ .Tag}}-arm64v8
+      - moulick/{{ .ProjectName }}:{{ .Tag}}-armv6
+      - moulick/{{ .ProjectName }}:{{ .Tag}}-armv7
+  - name_template: moulick/{{ .ProjectName }}:{{ .Major }}
+    image_templates:
+      - moulick/{{ .ProjectName }}:{{ .Major }}-amd64
+      - moulick/{{ .ProjectName }}:{{ .Major }}-arm64v8
+      - moulick/{{ .ProjectName }}:{{ .Major }}-armv6
+      - moulick/{{ .ProjectName }}:{{ .Major }}-armv7
+  - name_template: moulick/{{ .ProjectName }}:latest
+    image_templates:
+      - moulick/{{ .ProjectName }}:latest-amd64
+      - moulick/{{ .ProjectName }}:latest-arm64v8
+      - moulick/{{ .ProjectName }}:latest-armv6
+      - moulick/{{ .ProjectName }}:latest-armv7
+
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Tag}}-devel"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
