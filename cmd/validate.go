@@ -26,7 +26,7 @@ var validateCmd = &cobra.Command{
 	Long:  "Validate CR againt CRD",
 	// Args: cobra.OnlyValidArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := validate.Validate(crFiles, crFolders, crdFiles, crdFolders, ignoreKind); err != nil {
+		if err := validate.Validate(crFiles, crFolders, crdFiles, crdFolders, ignoreKind, k8sVersion); err != nil {
 			// red color for errors
 			color.Set(color.FgHiRed, color.Bold)
 			defer color.Unset()
@@ -53,15 +53,12 @@ func init() {
 	rootCmd.AddCommand(validateCmd)
 
 	// individual cr files
-	validateCmd.Flags().StringSliceVar(&crFiles, "cr-files", []string{}, "List of files to validate. Repeat the flag for multiple files. Comma separated list is also supported.")
+	validateCmd.Flags().StringSliceVarP(&crFiles, "cr-files", "c", []string{}, "Comma separated list of files containing Kubernetes CR(s) (can be specified multiple times)")
 	// cr folders
-	validateCmd.Flags().StringSliceVar(&crFolders, "cr-folders", []string{}, "List of folders containing files to validate. Repeat the flag for multiple folders. Comma separated list is also supported.")
-
+	validateCmd.Flags().StringSliceVar(&crFolders, "cr-folders", []string{}, "Comma separated list of folders containing Kubernetes CR(s) (can be specified multiple times)")
 	// individual crd files
-	validateCmd.Flags().StringSliceVar(&crdFiles, "crd-files", []string{}, "List of files containing CRD(s). Repeat the flag for multiple files. Comma separated list is also supported.")
+	validateCmd.Flags().StringSliceVarP(&crdFiles, "crd-files", "d", []string{}, "Comma separated list of files containing Kubernetes CRD(s) (can be specified multiple times)")
 	// crd folders
-	validateCmd.Flags().StringSliceVar(&crdFolders, "crd-folders", []string{}, "List of folders containing CRD(s). Repeat the flag for multiple folders. Comma separated list is also supported.")
-
-	validateCmd.Flags().StringSliceVar(&ignoreKind, "ignore-kinds", []string{}, "List of Kinds to ignore. Repeat the flag for multiple kinds. Comma separated list is also supported.")
-
+	validateCmd.Flags().StringSliceVar(&crdFolders, "crd-folders", []string{}, "Comma separated list of folders containing Kubernetes CRD(s) (can be specified multiple times)")
+	validateCmd.Flags().StringSliceVar(&ignoreKind, "ignore-kinds", []string{}, "Comma separated list of Kinds to ignore (can be specified multiple times)")
 }

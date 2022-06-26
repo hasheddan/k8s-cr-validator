@@ -10,7 +10,7 @@ import (
 // Validate returns an error
 // if the cr(s) cannot be validated againt the given crd(s)
 // or else if crd is not given and does not conform to jsonSchema(s) for known kubernetes native objects
-func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolders []string, ignoreKind []string) error {
+func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolders []string, ignoreKind []string, k8sVersion string) error {
 	var merr *multierror.Error
 
 	// collect paths of all CRDs
@@ -39,7 +39,7 @@ func Validate(crFiles []string, crFolders []string, crdFiles []string, crdFolder
 				cr.GetName(),
 				cr.GroupVersionKind(),
 			)
-			err = kubeConform(cr)
+			err = kubeConform(cr, k8sVersion)
 			if err != nil {
 				merr = multierror.Append(merr, fmt.Errorf("failed to validate CR: %w", err))
 				continue

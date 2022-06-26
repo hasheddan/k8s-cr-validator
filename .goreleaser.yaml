@@ -1,3 +1,4 @@
+---
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 project_name: k8s-cr-validator
@@ -34,18 +35,18 @@ archives:
       - goos: windows
         format: zip
 
-
 dockers:
   - use: buildx
     goos: linux
     goarch: amd64
-    dockerfile: "Dockerfile.goreleaser"
+    dockerfile: "goreleaser.Dockerfile"
     image_templates:
       - "moulick/{{ .ProjectName }}:{{ .Tag }}-amd64"
       - "moulick/{{ .ProjectName }}:{{ .Major }}-amd64"
       - "moulick/{{ .ProjectName }}:latest-amd64"
     build_flag_templates:
       - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.authors=moulickaggarwal"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -53,13 +54,14 @@ dockers:
   - use: buildx
     goos: linux
     goarch: arm64
-    dockerfile: "Dockerfile.goreleaser"
+    dockerfile: "goreleaser.Dockerfile"
     image_templates:
       - "moulick/{{ .ProjectName }}:{{ .Tag }}-arm64v8"
       - "moulick/{{ .ProjectName }}:{{ .Major }}-arm64v8"
       - "moulick/{{ .ProjectName }}:latest-arm64v8"
     build_flag_templates:
       - "--platform=linux/arm64/v8"
+      - "--label=org.opencontainers.image.authors=moulickaggarwal"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -68,13 +70,14 @@ dockers:
     goos: linux
     goarch: arm
     goarm: "6"
-    dockerfile: "Dockerfile.goreleaser"
+    dockerfile: "goreleaser.Dockerfile"
     image_templates:
       - "moulick/{{ .ProjectName }}:{{ .Tag }}-armv6"
       - "moulick/{{ .ProjectName }}:{{ .Major }}-armv6"
       - "moulick/{{ .ProjectName }}:latest-armv6"
     build_flag_templates:
       - "--platform=linux/arm/v6"
+      - "--label=org.opencontainers.image.authors=moulickaggarwal"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -83,13 +86,14 @@ dockers:
     goos: linux
     goarch: arm
     goarm: "7"
-    dockerfile: "Dockerfile.goreleaser"
+    dockerfile: "goreleaser.Dockerfile"
     image_templates:
       - "moulick/{{ .ProjectName }}:{{ .Tag }}-armv7"
       - "moulick/{{ .ProjectName }}:{{ .Major }}-armv7"
       - "moulick/{{ .ProjectName }}:latest-armv7"
     build_flag_templates:
       - "--platform=linux/arm/v7"
+      - "--label=org.opencontainers.image.authors=moulickaggarwal"
       - "--label=org.opencontainers.image.created={{.Date}}"
       - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
@@ -119,6 +123,15 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ incpatch .Tag}}-devel"
+
+gomod:
+  proxy: true
+  env:
+    - GOPROXY=https://proxy.golang.org,direct
+    - GOSUMDB=sum.golang.org
+  mod: mod
+  gobinary: go
+
 changelog:
   sort: asc
   filters:

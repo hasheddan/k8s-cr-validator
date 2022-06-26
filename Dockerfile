@@ -1,5 +1,5 @@
 FROM docker.io/library/golang:1.18 as builder
-MAINTAINER Moulick Aggarawl <moulickaggarwal@gmail.com>
+LABEL org.opencontainers.image.authors=moulickaggarwal
 
 WORKDIR /app
 # Copy the Go Modules manifests
@@ -19,6 +19,6 @@ COPY main.go main.go
 RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o k8s-cr-validator main.go
 
 FROM alpine:latest
-RUN apk add git
+RUN apk add git --no-cache
 WORKDIR /
 COPY --from=builder /app/k8s-cr-validator .
