@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/hasheddan/k8s-cr-validator/cmd"
+	"github.com/moulick/k8s-cr-validator/cmd"
 )
 
 func main() {

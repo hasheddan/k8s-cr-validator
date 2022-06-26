@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/spf13/cobra"
 
-	"github.com/hasheddan/k8s-cr-validator/validate"
+	"github.com/moulick/k8s-cr-validator/validate"
 )
 
 var (

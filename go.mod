@@ -1,4 +1,4 @@
-module github.com/hasheddan/k8s-cr-validator
+module github.com/moulick/k8s-cr-validator
 
 go 1.18
 
