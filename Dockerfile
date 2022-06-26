@@ -16,12 +16,11 @@ COPY validate/ validate/
 COPY main.go main.go
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o validator main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o k8s-cr-validator main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM alpine:latest
+RUN apk add git
 WORKDIR /
-COPY --from=builder /app/validator .
-
-ENTRYPOINT ["/validator"]
+COPY --from=builder /app/k8s-cr-validator .
