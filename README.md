@@ -130,6 +130,7 @@ failed to validate CR: failed to validate bar (/v1, Kind=Namespace): For field m
 exit status 1
 ```
 
+### Docker images at https://hub.docker.com/r/moulick/k8s-cr-validator
 
 
 ## Credits
