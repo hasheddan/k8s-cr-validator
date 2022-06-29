@@ -24,6 +24,6 @@ func Execute() {
 
 func init() {
 	// rootCmd.PersistentFlags().BoolVarP(&forceColor, "force-color", "", false, "Force colored output even if stdout is not a TTY")
-	rootCmd.PersistentFlags().StringVar(&k8sVersion, "kubernetes-version", "master", "Version of Kubernetes to validate against, e.g: 1.20.12")
+	rootCmd.PersistentFlags().StringVar(&k8sVersion, "kubernetes-version", "1.20.12", "Version of Kubernetes to validate against, e.g: 1.20.12")
 
 }
