@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:1.18 as builder
+FROM docker.io/library/golang:1.19.2 as builder
 LABEL org.opencontainers.image.authors=moulickaggarwal
 
 WORKDIR /app
